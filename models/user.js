@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 'use strict';
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes, Model) => {
 	class User extends Model {
 		/**
 		 * Helper method for defining associations.
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false
 		},
 		phone_number: {
-			type: DataTypes.INTEGER
+			type: DataTypes.STRING(20)
 		},
 		otp: {
 			type: DataTypes.INTEGER(4).UNSIGNED
