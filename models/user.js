@@ -16,10 +16,17 @@ module.exports = (sequelize, DataTypes, Model) => {
 	User.init({
 		name: {
 			type: DataTypes.STRING,
-			allowNull: false
+			allowNull: false,
+			validate: {
+				notEmpty: { msg: 'name cannot be empty' },
+				notNull: { msg: 'please enter name' },
+			}
 		},
 		phone_number: {
-			type: DataTypes.STRING(20)
+			type: DataTypes.STRING(20),
+			validate: {
+				isMobilePhone: { msg: 'invalid phone number' }
+			}
 		},
 		otp: {
 			type: DataTypes.INTEGER(4).UNSIGNED

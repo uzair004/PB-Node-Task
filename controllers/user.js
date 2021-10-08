@@ -12,8 +12,7 @@ exports.createUser = async function (req, res) {
 		await User.create(newUser);
 		res.status(200).json({ status: 'success', msg: 'Account created' })
 	} catch (dbError) {
-		console.error('unable to insert in database ', dbError);
-		res.status(500).json({ status: 'error', msg: 'Account creation failed' });
+		handleErrors(dbError, res);
 	}
 
 }
@@ -73,3 +72,15 @@ function checkOTP(otp, foundUser, res) {
 	}
 }
 
+
+function handleErrors(Error, res) {
+	if (Error.name === 'SequelizeValidationError') {
+		const errObj = {};
+		Error.errors.map(er => {
+			errObj[er.path] = er.message;
+		})
+		res.status(400).json({ status: 'error', msg: errObj });
+	} else {
+		res.status(500).json({ status: 'error', msg: 'Account creation failed' });
+	}
+}
