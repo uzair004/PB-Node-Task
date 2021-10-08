@@ -17,7 +17,7 @@ checkConnection();
 // -------------- ROUTES ----------
 // home route
 app.get('/', (req, res) => {
-	res.json({ msg: 'welcome home !' });
+	res.status(200).json({ status: 'success', msg: 'welcome home !' });
 });
 
 // users routes
@@ -26,7 +26,7 @@ app.use('/users', userRouter);
 
 
 app.use('*', (req, res) => {
-	res.json({ statusCode: 404, msg: 'Route doesnt exist' });
+	res.status(404).json({ status: 'error', msg: 'Route doesnt exist' });
 })
 
 

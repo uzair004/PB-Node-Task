@@ -10,10 +10,10 @@ exports.createUser = async function (req, res) {
 
 	try {
 		await User.create(newUser);
-		res.json({ statusCode: 200, msg: 'Account created' });
+		res.status(200).json({ status: 'success', msg: 'Account created' })
 	} catch (dbError) {
 		console.error('unable to insert in database ', dbError);
-		res.json({ statusCode: 500, msg: 'Account creation failed' });
+		res.status(500).json({ status: 'error', msg: 'Account creation failed' });
 	}
 
 }
@@ -25,7 +25,7 @@ exports.generateOTP = async function (req, res) {
 		foundUser = await User.findOne({ where: { phone_number: req.body.phone_number } });
 	} catch (findErr) {
 		console.error('error while finding user: ', findErr);
-		res.json({ statusCode: 500, msg: 'Server error' });
+		res.status(500).json({ status: 'error', msg: 'Server Error' })
 		return;
 	}
 
@@ -35,10 +35,10 @@ exports.generateOTP = async function (req, res) {
 		foundUser.otp_expiration_date = new Date();
 
 		await foundUser.save();
-		res.json({ statusCode: 200, id: foundUser.id });
+		res.status(200).json({ status: 'success', id: foundUser.id })
 
 	} else {
-		res.json({ statusCode: 404, msg: 'Phone Number doesnt exist' });
+		res.status(404).json({ status: 'error', msg: 'Phone Number doesnt exist' });
 	}
 
 }
@@ -49,13 +49,13 @@ exports.verifyOTP = async function (req, res) {
 	try {
 		foundUser = await User.findByPk(req.params.id);
 	} catch (findErr) {
-		res.json({ statusCode: 500, msg: 'Server Problem' });
+		res.status(500).json({ status: 'error', msg: 'Server Problem' });
 	}
 
 	if (foundUser) {
 		checkOTP(req.query.otp, foundUser, res);
 	} else {
-		res.json({ statusCode: 404, msg: 'User Not Found' });
+		res.status(404).json({ status: 'error', msg: 'User Not Found' });
 	}
 
 }
@@ -64,12 +64,12 @@ exports.verifyOTP = async function (req, res) {
 
 function checkOTP(otp, foundUser, res) {
 	if (otp != foundUser.otp.toString()) {
-		res.json({ statusCode: 401, msg: 'Incorrect OTP' });
+		res.status(401).json({ status: 'error', msg: 'Incorrect OTP' });
 	} else if (foundUser.is_otp_expired) {
-		res.json({ statusCode: 401, msg: 'OTP Expired' });
+		res.status(401).json({ status: 'error', msg: 'OTP Expired' });
 	}
 	else {
-		res.json({ statusCode: 200, user: foundUser });
+		res.status(200).json({ status: 'success', user: foundUser });
 	}
 }
 
