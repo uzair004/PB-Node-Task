@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { isMoment } = require('moment');
 
 'use strict';
 module.exports = (sequelize, DataTypes, Model) => {
@@ -35,7 +36,9 @@ module.exports = (sequelize, DataTypes, Model) => {
 			type: DataTypes.VIRTUAL,
 			get() {
 				// otp_expiration_date < current date
-				return this.getDataValue(otp_expiration_date).isAfter(moment()) ? true : false
+				const expirationMoment = moment(this.otp_expiration_date);
+				const isExpired = expirationMoment.isAfter(moment()) ? false : true;
+				return isExpired;
 			}
 		}
 	}, {

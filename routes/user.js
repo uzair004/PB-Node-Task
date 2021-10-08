@@ -14,7 +14,7 @@ router.post('/', userController.createUser);
 router.post('/generateOTP', upload.none(), userController.generateOTP);
 
 // verify otp route
-router.post('/:id/verifyOTP', userController.verifyOTP);
+router.get('/:id/verifyOTP', userController.verifyOTP);
 
 
 module.exports = router;
