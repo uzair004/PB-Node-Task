@@ -25,7 +25,9 @@ const userRouter = require('./routes/user');
 app.use('/users', userRouter);
 
 
-
+app.use('*', (req, res) => {
+	res.json({ statusCode: 404, msg: 'Route doesnt exist' });
+})
 
 
 // start server
