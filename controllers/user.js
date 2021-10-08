@@ -5,9 +5,7 @@ const sequelize = require('../config/db').sequelize;
 const User = require('../models/user')(sequelize, Sequelize.DataTypes, Sequelize.Model);
 
 exports.createUser = async function (req, res) {
-
 	const { name, phone_number } = req.body;
-
 	const newUser = { name, phone_number }
 
 	try {
@@ -20,10 +18,9 @@ exports.createUser = async function (req, res) {
 
 }
 
+
 exports.generateOTP = async function (req, res) {
-
 	let foundUser;
-
 	try {
 		foundUser = await User.findOne({ where: { phone_number: req.body.phone_number } });
 	} catch (findErr) {
@@ -46,6 +43,7 @@ exports.generateOTP = async function (req, res) {
 
 }
 
+
 exports.verifyOTP = async function (req, res) {
 	let foundUser;
 	try {
@@ -53,8 +51,6 @@ exports.verifyOTP = async function (req, res) {
 	} catch (findErr) {
 		res.json({ statusCode: 500, msg: 'Server Problem' });
 	}
-
-	console.log('is expired: ', foundUser.is_otp_expired)
 
 	if (foundUser) {
 		checkOTP(req.query.otp, foundUser, res);
